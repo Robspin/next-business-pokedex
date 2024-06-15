@@ -8,6 +8,7 @@ import {
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="w-full border-b dark:border-neutral-800 flex justify-center">
               <nav
                   className="px-8 md:px-16 py-3 max-lg:min-w-full lg:min-w-[1024px] max-w-[1024px] flex justify-between">
-                  <h4 className="uppercase tracking-tighter font-semibold">Business Pokedex</h4>
+                  <Link href="/">
+                    <h4 className="uppercase tracking-tighter font-semibold">Business Pokedex</h4>
+                  </Link>
                   <SignedOut>
                       <SignInButton/>
                   </SignedOut>
