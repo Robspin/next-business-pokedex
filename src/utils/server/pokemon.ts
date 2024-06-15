@@ -1,8 +1,9 @@
 "use server"
+import { PokemonResponse } from '@/utils/types/pokemon'
 
-export const getPokemon = async (id: number) => {
+export const getPokemon = async (id: number): Promise<PokemonResponse | undefined> => {
     try {
-        return await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        return await (await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)).json()
     } catch (e) {
         console.log(e)
     }

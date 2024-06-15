@@ -14,6 +14,10 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import FormInput from '@/components/form-input'
 import { Textarea } from '@/components/ui/textarea'
+import { getPokemon } from '@/utils/server/pokemon'
+import { getRandomPokemonId } from '@/utils/helpers'
+import { BaseBusinessCard } from '@/utils/types/business-card'
+import { addBusinessCard } from '@/utils/server/db-actions'
 
 export const FormSchema = z.object({
     name: z.string()
@@ -34,13 +38,34 @@ export const FormSchema = z.object({
     notes: z.string().optional()
 })
 
-export default function CreateCardForm() {
+type Props = {
+    userId: string
+}
+
+export default function CreateCardForm({ userId }: Props) {
     const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema) })
     const router = useRouter()
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { name } = data
-        console.log(data)
+        const { name, company, title, notes, phone, email } = data
+
+        const pokemonResponse = await getPokemon(getRandomPokemonId())
+        if (!pokemonResponse) return
+        const businessCard: BaseBusinessCard = {
+            name,
+            company,
+            title,
+            phone: phone ?? '',
+            email: email ?? '',
+            notes: notes ?? '',
+            userId,
+            pokemonId: pokemonResponse.id,
+            pokemonSpriteUrl: pokemonResponse.sprites.front_default,
+            pokemonName: pokemonResponse.name
+        }
+
+        const response = await addBusinessCard(businessCard)
+        console.log(response)
     }
 
     return (

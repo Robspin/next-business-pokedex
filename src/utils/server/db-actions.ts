@@ -1,13 +1,16 @@
 "use server"
-import { eq } from "drizzle-orm"
 import db from "../../../db/drizzle"
 import { users, businessCards } from "../../../db/schema"
 import { revalidatePath } from 'next/cache'
-import { User } from '@/utils/types/user'
+import { User as BDUserTyper } from '@/utils/types/user'
+import { User as ClerkUser } from '@clerk/backend'
 import { v4 as uuidv4 } from 'uuid'
-import { BaseBusinessCard } from '@/utils/types/business-card'
+import { BaseBusinessCard } from '@/utils/types/db-actions'
+import { unstable_noStore as no_store } from 'next/cache'
+import { undefined } from 'zod'
 
-export const addUser = async (user: User) => {
+export const addDBUser = async (user: BDUserTyper) => {
+    no_store()
     await db.insert(users).values({
         ...user,
         id: uuidv4(),
@@ -16,10 +19,10 @@ export const addUser = async (user: User) => {
     revalidatePath("/")
 }
 
-export const addBusinessCard = async (businessCard: BaseBusinessCard, userId: string) => {
+export const addBusinessCard = async (businessCard: BaseBusinessCard) => {
+    no_store()
     await db.insert(businessCards).values({
         ...businessCard,
-        userId,
         id: uuidv4(),
         createdAt: new Date()
     })
@@ -27,17 +30,30 @@ export const addBusinessCard = async (businessCard: BaseBusinessCard, userId: st
 }
 
 export const getDBUser = async (clerkUserId: string) => {
+    no_store()
     return db.query.users.findFirst({
         where: ((strat, { eq }) => eq(strat.clerkUserId, clerkUserId)),
     })
 }
 
 export const getBusinessCard = async (id: string, userId: string) => {
+    no_store()
     return db.query.businessCards.findFirst({
         where: ((strat, { eq }) => eq(strat.id, id) && eq(strat.userId, userId)),
     })
 }
 
-export const getBusinessCards = async (userId: string) => {
+export const getBusinessCards = async (userId: string | null) => {
+    if (!userId) return []
+    no_store()
     return db.query.businessCards.findMany({ where: ((strat, { eq }) => eq(strat.userId, userId)) })
+}
+
+export const createDBUser = async (user: ClerkUser) => {
+    no_store()
+    const DBUser: BDUserTyper = {
+        clerkUserId: user.id,
+        email: user.emailAddresses[0].emailAddress
+    }
+    await addDBUser(DBUser)
 }

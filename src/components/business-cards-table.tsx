@@ -34,6 +34,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { FullBusinessCard } from '@/utils/types/business-card'
 
 const data: Payment[] = [
     {
@@ -144,7 +145,11 @@ export const columns: ColumnDef<Payment>[] = [
     },
 ]
 
-export default function ExampleTable() {
+type Props = {
+    businessCards: FullBusinessCard[]
+}
+
+export default function BusinessCardsTable({ businessCards }: Props) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -152,6 +157,8 @@ export default function ExampleTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+
+    console.log(businessCards)
 
     const table = useReactTable({
         data,

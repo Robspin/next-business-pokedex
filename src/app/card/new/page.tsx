@@ -1,15 +1,25 @@
 import CreateCardForm from '@/components/create-card-form'
-import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
+import { RedirectToSignIn, SignedIn } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
+import { createDBUser, getDBUser } from '@/utils/server/db-actions'
+import ClientAutoRefresh from '@/components/client-auto-refresh'
 
 
 export default async function Page() {
-    return (
+    const user = await currentUser()
+    let DBUser = await getDBUser(user?.id ?? '')
+
+    if (!DBUser && user) {
+        createDBUser(user)
+        return <ClientAutoRefresh />
+    }
+
+    if (!user) return <RedirectToSignIn />
+
+    if (DBUser) return (
         <div>
-            <SignedOut>
-                <RedirectToSignIn />
-            </SignedOut>
             <SignedIn>
-                <CreateCardForm />
+                <CreateCardForm userId={DBUser.id} />
             </SignedIn>
         </div>
     )

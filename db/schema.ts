@@ -16,6 +16,7 @@ export const businessCards = pgTable('business_cards', {
     phone: varchar('phone', { length: 255 }),
     email: varchar('email', { length: 255 }),
     pokemonId: integer('pokemon_id'),
+    pokemonName: varchar('pokemon_name', { length: 255 }),
     pokemonSpriteUrl: varchar('pokemon_sprite_url', { length: 255 }),
     notes: text('notes'),
     createdAt: timestamp('created_at').notNull().defaultNow()
