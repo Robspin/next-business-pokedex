@@ -80,14 +80,14 @@ export default function CreateCardForm({ userId }: Props) {
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <CardContent className="grid lg:grid-cols-2 gap-4">
+                    <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <FormInput formControl={form.control} name="name" />
                         <FormInput formControl={form.control} name="title" />
                         <FormInput formControl={form.control} name="company" />
                         <FormInput formControl={form.control} name="phone" />
                         <FormInput formControl={form.control} name="mobile" />
                         <FormInput formControl={form.control} name="email" />
-                        <div className="col-span-2">
+                        <div className="lg:col-span-2">
                             <FormField
                                 control={form.control}
                                 name="notes"

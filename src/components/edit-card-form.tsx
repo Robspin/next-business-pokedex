@@ -94,7 +94,7 @@ export default function EditCardForm({ businessCard, userId }: Props) {
                 <div className="flex justify-between relative">
                     <CardTitle className="text-xl">{name}</CardTitle>
                     <div className="absolute right-0 -top-8 flex items-center">
-                        <p className="text-stone-300 italic">{capitalizeFirstLetter(pokemonName ?? '')} #{pokemonId}</p>
+                        <p className="max-md:hidden text-stone-300 italic">{capitalizeFirstLetter(pokemonName ?? '')} #{pokemonId}</p>
                         <Image src={pokemonSpriteUrl ?? ''} alt={pokemonName ?? 'Pokemon'} height={120} width={120} />
                     </div>
                 </div>
@@ -109,7 +109,7 @@ export default function EditCardForm({ businessCard, userId }: Props) {
                         <FormInput formControl={form.control} name="mobile" />
                         <FormInput formControl={form.control} name="email" />
                         <FormInput formControl={form.control} disableInput name="createdAt" />
-                        <div className="col-span-2">
+                        <div className="lg:col-span-2">
                             <FormField
                                 control={form.control}
                                 name="notes"

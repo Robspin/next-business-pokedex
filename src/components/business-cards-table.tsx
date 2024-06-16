@@ -58,12 +58,12 @@ export const columns: ColumnDef<FullBusinessCard>[] = [
         header: "Company",
     },
     {
-        accessorKey: "phone",
-        header: "Phone",
+        accessorKey: "mobile",
+        header: "Mobile",
     },
     {
-        accessorKey: "email",
-        header: "Email",
+        accessorKey: "notes",
+        header: "Notes",
     },
     {
         id: "actions",
@@ -122,7 +122,7 @@ export default function BusinessCardsTable({ businessCards }: Props) {
                     onChange={(event) =>
                         table.getColumn("email")?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="w-[200px]"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
