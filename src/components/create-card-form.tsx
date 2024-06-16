@@ -25,20 +25,14 @@ export const FormSchema = z.object({
         .min(3, 'This field should be at least 3 characters')
         .max(255, 'This field should be no more than 255 characters'),
     title: z.string()
-        .min(3, 'This field should be at least 3 characters')
+        .min(1, 'This field should be at least 1 characters')
         .max(255, 'This field should be no more than 255 characters'),
     company: z.string()
-        .min(3, 'This field should be at least 3 characters')
+        .min(1, 'This field should be at least 1 characters')
         .max(255, 'This field should be no more than 255 characters'),
-    phone: z.string()
-        .min(3, 'This field should be at least 3 characters')
-        .max(255, 'This field should be no more than 255 characters').optional(),
-    mobile: z.string()
-        .min(3, 'This field should be at least 3 characters')
-        .max(255, 'This field should be no more than 255 characters').optional(),
-    email: z.string()
-        .min(3, 'This field should be at least 3 characters')
-        .max(255, 'This field should be no more than 255 characters').optional(),
+    phone: z.string().max(255, 'This field should be no more than 255 characters').optional(),
+    mobile: z.string().max(255, 'This field should be no more than 255 characters').optional(),
+    email: z.string().max(255, 'This field should be no more than 255 characters').optional(),
     notes: z.string().optional()
 })
 
