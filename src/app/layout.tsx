@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link'
+import { Toaster } from '@/components/ui/sonner'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <nav
                   className="px-8 md:px-16 py-3 max-lg:min-w-full lg:min-w-[1024px] max-w-[1024px] flex justify-between">
                   <Link href="/">
-                    <h4 className="uppercase tracking-tighter font-semibold">Business Pokedex</h4>
+                    <h4 className="uppercase tracking-tighter font-semibold mt-1">Business Pokedex</h4>
                   </Link>
                   <SignedOut>
                       <SignInButton/>
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
               <div className="px-8 md:px-16 max-lg:min-w-full lg:min-w-[1024px] max-w-[1024px] md:p-8">
                   {children}
+                  <Toaster />
               </div>
               <footer className="h-40 flex justify-center items-center w-full mt-40">
                   <p>Built by <a href="https://github.com/Robspin" target="_blank" className="underline">Robspin</a></p>

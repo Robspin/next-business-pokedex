@@ -3,6 +3,7 @@ import { RedirectToSignIn, SignedIn } from '@clerk/nextjs'
 import { currentUser } from '@clerk/nextjs/server'
 import { createDBUser, getDBUser } from '@/utils/server/db-actions'
 import ClientAutoRefresh from '@/components/client-auto-refresh'
+import Link from 'next/link'
 
 
 export default async function Page() {
@@ -19,6 +20,7 @@ export default async function Page() {
     if (DBUser) return (
         <div>
             <SignedIn>
+                <Link href='/'></Link>
                 <CreateCardForm userId={DBUser.id} />
             </SignedIn>
         </div>

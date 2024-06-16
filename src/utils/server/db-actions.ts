@@ -7,7 +7,6 @@ import { User as ClerkUser } from '@clerk/backend'
 import { v4 as uuidv4 } from 'uuid'
 import { BaseBusinessCard } from '@/utils/types/db-actions'
 import { unstable_noStore as no_store } from 'next/cache'
-import { undefined } from 'zod'
 
 export const addDBUser = async (user: BDUserTyper) => {
     no_store()

@@ -18,6 +18,7 @@ export default function FormInput({ name, formControl, inputType, inputMin, inpu
         <FormField
             control={formControl}
             name={name}
+            defaultValue=""
             {...props}
             render={({field}) => (
                 <FormItem>

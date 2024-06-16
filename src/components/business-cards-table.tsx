@@ -1,5 +1,4 @@
 "use client"
-
 import * as React from "react"
 import {
     ColumnDef,
@@ -13,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ChevronDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -36,83 +35,27 @@ import {
 } from "@/components/ui/table"
 import { FullBusinessCard } from '@/utils/types/business-card'
 
-const data: Payment[] = [
-    {
-        id: "m5gr84i9",
-        amount: 316,
-        status: "success",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        amount: 242,
-        status: "success",
-        email: "Abe45@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        amount: 837,
-        status: "processing",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        amount: 874,
-        status: "success",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        amount: 721,
-        status: "failed",
-        email: "carmella@hotmail.com",
-    },
-]
 
-export type Payment = {
-    id: string
-    amount: number
-    status: "pending" | "processing" | "success" | "failed"
-    email: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<FullBusinessCard>[] = [
     {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("status")}</div>
-        ),
+        accessorKey: "name",
+        header: "Name",
+    },
+    {
+        accessorKey: "title",
+        header: "Title",
+    },
+    {
+        accessorKey: "company",
+        header: "Company",
+    },
+    {
+        accessorKey: "phone",
+        header: "Phone",
     },
     {
         accessorKey: "email",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Email
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-    },
-    {
-        accessorKey: "amount",
-        header: () => <div className="text-right">Amount</div>,
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("amount"))
-
-            // Format the amount as a dollar amount
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            }).format(amount)
-
-            return <div className="text-right font-medium">{formatted}</div>
-        },
+        header: "Email",
     },
     {
         id: "actions",
@@ -158,10 +101,8 @@ export default function BusinessCardsTable({ businessCards }: Props) {
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
-    console.log(businessCards)
-
     const table = useReactTable({
-        data,
+        data: businessCards,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -217,7 +158,7 @@ export default function BusinessCardsTable({ businessCards }: Props) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md border border-neutral-700">
+            <div className="rounded-md border border-stone-700 bg-black">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -269,8 +210,7 @@ export default function BusinessCardsTable({ businessCards }: Props) {
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                    {businessCards.length} total cards
                 </div>
                 <div className="space-x-2">
                     <Button

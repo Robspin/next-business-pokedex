@@ -18,6 +18,7 @@ import { getPokemon } from '@/utils/server/pokemon'
 import { getRandomPokemonId } from '@/utils/helpers'
 import { BaseBusinessCard } from '@/utils/types/business-card'
 import { addBusinessCard } from '@/utils/server/db-actions'
+import { serverRequestHandler } from '@/utils/server/server-request-handler'
 
 export const FormSchema = z.object({
     name: z.string()
@@ -49,23 +50,30 @@ export default function CreateCardForm({ userId }: Props) {
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         const { name, company, title, notes, phone, email } = data
 
-        const pokemonResponse = await getPokemon(getRandomPokemonId())
-        if (!pokemonResponse) return
-        const businessCard: BaseBusinessCard = {
-            name,
-            company,
-            title,
-            phone: phone ?? '',
-            email: email ?? '',
-            notes: notes ?? '',
-            userId,
-            pokemonId: pokemonResponse.id,
-            pokemonSpriteUrl: pokemonResponse.sprites.front_default,
-            pokemonName: pokemonResponse.name
-        }
+        // Add snackbar
+        await serverRequestHandler({
+            serverFunction: async () => {
+                const pokemonResponse = await getPokemon(getRandomPokemonId())
+                console.log(pokemonResponse)
+                if (!pokemonResponse) throw new Error('Failed to get pokemon api response!')
+                const businessCard: BaseBusinessCard = {
+                    name,
+                    company,
+                    title,
+                    phone: phone ?? '',
+                    email: email ?? '',
+                    notes: notes ?? '',
+                    userId,
+                    pokemonId: pokemonResponse.id,
+                    pokemonSpriteUrl: pokemonResponse.sprites.front_default,
+                    pokemonName: pokemonResponse.name
+                }
 
-        const response = await addBusinessCard(businessCard)
-        console.log(response)
+                await addBusinessCard(businessCard)
+            },
+            successMessage: 'Success',
+            onSuccess: () => router.push('/')
+        })
     }
 
     return (
