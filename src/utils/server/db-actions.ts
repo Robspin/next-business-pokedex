@@ -40,9 +40,12 @@ export const getBusinessCard = async (id: string, userId: string | null) => {
     if (!userId) return undefined
 
     no_store()
-    return db.query.businessCards.findFirst({
-        where: ((strat, { eq }) => eq(strat.id, id) && eq(strat.userId, userId)),
+    const card = await db.query.businessCards.findFirst({
+        where: ((strat, { eq }) => eq(strat.id, id)),
     })
+
+    if (card && card.userId === userId) return card
+    return undefined
 }
 
 export const getBusinessCards = async (userId: string | null) => {
