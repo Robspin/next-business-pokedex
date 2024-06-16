@@ -36,7 +36,9 @@ export const getDBUser = async (clerkUserId: string) => {
     })
 }
 
-export const getBusinessCard = async (id: string, userId: string) => {
+export const getBusinessCard = async (id: string, userId: string | null) => {
+    if (!userId) return undefined
+
     no_store()
     return db.query.businessCards.findFirst({
         where: ((strat, { eq }) => eq(strat.id, id) && eq(strat.userId, userId)),

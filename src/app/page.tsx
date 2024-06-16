@@ -30,7 +30,7 @@ export default async function Home() {
             <SignedIn>
                 {/*{user?.emailAddresses[0].emailAddress}*/}
                 <div className="flex justify-center py-20">
-                    <Link href="/card/new">
+                    <Link href="/cards/new">
                         <Button>Add new business card</Button>
                     </Link>
                 </div>

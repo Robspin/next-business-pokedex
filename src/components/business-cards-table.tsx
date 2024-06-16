@@ -12,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ChevronDown, MoreHorizontal } from "lucide-react"
+import { ChevronDown, MoreHorizontal, Pencil, Trash } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -34,12 +34,20 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { FullBusinessCard } from '@/utils/types/business-card'
+import Link from 'next/link'
 
 
 export const columns: ColumnDef<FullBusinessCard>[] = [
     {
         accessorKey: "name",
         header: "Name",
+        cell: ({ row }) => {
+            return (
+                    <Link href={`/cards/${row.original.id}`} className="hover:underline">
+                        {row.getValue('name')}
+                    </Link>
+            )
+        },
     },
     {
         accessorKey: "title",
@@ -61,28 +69,13 @@ export const columns: ColumnDef<FullBusinessCard>[] = [
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const payment = row.original
-
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(payment.id)}
-                        >
-                            Copy payment ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex gap-1">
+                    <Link href={`/cards/${row.original.id}`}>
+                        <Button size="icon" variant="ghost"><Pencil size={16} /></Button>
+                    </Link>
+                    <Button size="icon" className="text-red-400" variant="ghost"><Trash size={16} /></Button>
+                </div>
             )
         },
     },
