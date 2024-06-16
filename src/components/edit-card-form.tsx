@@ -34,6 +34,9 @@ export const FormSchema = z.object({
     phone: z.string()
         .min(3, 'This field should be at least 3 characters')
         .max(255, 'This field should be no more than 255 characters').optional(),
+    mobile: z.string()
+        .min(3, 'This field should be at least 3 characters')
+        .max(255, 'This field should be no more than 255 characters').optional(),
     email: z.string()
         .min(3, 'This field should be at least 3 characters')
         .max(255, 'This field should be no more than 255 characters').optional(),
@@ -47,7 +50,7 @@ type Props = {
 }
 
 export default function EditCardForm({ businessCard, userId }: Props) {
-    const { name, company, title, notes, phone, email, createdAt, pokemonSpriteUrl, pokemonName, pokemonId } = businessCard
+    const { name, company, title, notes, phone, mobile, email, createdAt, pokemonSpriteUrl, pokemonName, pokemonId } = businessCard
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -56,6 +59,7 @@ export default function EditCardForm({ businessCard, userId }: Props) {
             title: title ?? '',
             notes: notes ?? '',
             phone: phone ?? '',
+            mobile: mobile ?? '',
             email: email ?? '',
             createdAt: createdAt.toLocaleString() ?? ''
         }
@@ -108,6 +112,7 @@ export default function EditCardForm({ businessCard, userId }: Props) {
                         <FormInput formControl={form.control} name="title" />
                         <FormInput formControl={form.control} name="company" />
                         <FormInput formControl={form.control} name="phone" />
+                        <FormInput formControl={form.control} name="mobile" />
                         <FormInput formControl={form.control} name="email" />
                         <FormInput formControl={form.control} disableInput name="createdAt" />
                         <div className="col-span-2">

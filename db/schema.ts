@@ -14,6 +14,7 @@ export const businessCards = pgTable('business_cards', {
     title: varchar('title', { length: 255 }),
     company: varchar('company', { length: 255 }),
     phone: varchar('phone', { length: 255 }),
+    mobile: varchar('mobile', { length: 255 }),
     email: varchar('email', { length: 255 }),
     pokemonId: integer('pokemon_id'),
     pokemonName: varchar('pokemon_name', { length: 255 }),

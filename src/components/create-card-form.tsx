@@ -33,6 +33,9 @@ export const FormSchema = z.object({
     phone: z.string()
         .min(3, 'This field should be at least 3 characters')
         .max(255, 'This field should be no more than 255 characters').optional(),
+    mobile: z.string()
+        .min(3, 'This field should be at least 3 characters')
+        .max(255, 'This field should be no more than 255 characters').optional(),
     email: z.string()
         .min(3, 'This field should be at least 3 characters')
         .max(255, 'This field should be no more than 255 characters').optional(),
@@ -48,7 +51,7 @@ export default function CreateCardForm({ userId }: Props) {
     const router = useRouter()
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { name, company, title, notes, phone, email } = data
+        const { name, company, title, notes, phone, mobile, email } = data
 
         await serverRequestHandler({
             serverFunction: async () => {
@@ -60,6 +63,7 @@ export default function CreateCardForm({ userId }: Props) {
                     company,
                     title,
                     phone: phone ?? '',
+                    mobile: mobile ?? '',
                     email: email ?? '',
                     notes: notes ?? '',
                     userId,
@@ -87,6 +91,7 @@ export default function CreateCardForm({ userId }: Props) {
                         <FormInput formControl={form.control} name="title" />
                         <FormInput formControl={form.control} name="company" />
                         <FormInput formControl={form.control} name="phone" />
+                        <FormInput formControl={form.control} name="mobile" />
                         <FormInput formControl={form.control} name="email" />
                         <div className="col-span-2">
                             <FormField

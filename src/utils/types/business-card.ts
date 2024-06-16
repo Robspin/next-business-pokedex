@@ -4,6 +4,7 @@ export type BaseBusinessCard = {
     title: string
     company: string
     phone: string
+    mobile: string
     email: string
     notes: string
     pokemonId: number
@@ -21,6 +22,7 @@ export type FullBusinessCard = {
     title: string | null
     company: string | null
     phone: string | null
+    mobile: string | null
     pokemonId: number | null
     pokemonName: string | null
     pokemonSpriteUrl: string | null
