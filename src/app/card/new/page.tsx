@@ -21,7 +21,9 @@ export default async function Page() {
     if (DBUser) return (
         <div>
             <SignedIn>
-                <Link href='/' className="flex hover:underline gap-2 mb-4"><MoveLeft />Back to overview</Link>
+                <div className="inline-block">
+                    <Link href='/' className="flex items-center hover:underline gap-2 mb-4"><MoveLeft size={16} />Back to overview</Link>
+                </div>
                 <CreateCardForm userId={DBUser.id} />
             </SignedIn>
         </div>
