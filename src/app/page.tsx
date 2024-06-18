@@ -13,14 +13,12 @@ export default async function Home() {
     const dbUser = await getDBUser(user?.id ?? '')
     const businessCards = await getBusinessCards(dbUser?.id ?? '')
 
-    console.log(businessCards)
-
     return (
       <main className="w-full">
           <SignedOut>
               <div className="w-full justify-center items-center flex">
                   <SignInButton>
-                      <div className="py-20">
+                      <div className="py-10">
                           <Button>
                               Sign in to continue
                           </Button>
