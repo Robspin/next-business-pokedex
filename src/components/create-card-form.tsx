@@ -50,7 +50,6 @@ export default function CreateCardForm({ userId }: Props) {
         await serverRequestHandler({
             serverFunction: async () => {
                 const pokemonResponse = await getPokemon(getRandomPokemonId())
-                console.log(pokemonResponse)
                 if (!pokemonResponse) throw new Error('Failed to get pokemon api response!')
                 const businessCard: BaseBusinessCard = {
                     name,
@@ -66,10 +65,10 @@ export default function CreateCardForm({ userId }: Props) {
                     pokemonName: pokemonResponse.name
                 }
 
-                await addBusinessCard(businessCard)
+                return await addBusinessCard(businessCard)
             },
             successMessage: 'Success',
-            onSuccess: () => router.push('/')
+            onSuccess: (id) => router.push(`/cards/${id}`)
         })
     }
 

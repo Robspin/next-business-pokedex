@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { getBusinessCards, getDBUser } from '@/utils/server/db-actions'
 import { currentUser } from '@clerk/nextjs/server'
+import { Plus } from 'lucide-react'
 
 
 export default async function Home() {
@@ -29,9 +30,9 @@ export default async function Home() {
           </SignedOut>
             <SignedIn>
                 {/*{user?.emailAddresses[0].emailAddress}*/}
-                <div className="flex justify-center py-20">
+                <div className="flex justify-center py-10">
                     <Link href="/cards/new">
-                        <Button>Add new business card</Button>
+                        <Button><Plus size={20} className="mr-2 -ml-1" />Add new business card</Button>
                     </Link>
                 </div>
                 <BusinessCardsTable businessCards={businessCards} />

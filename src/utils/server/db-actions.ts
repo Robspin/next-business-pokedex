@@ -3,10 +3,11 @@ import db from "../../../db/drizzle"
 import { users, businessCards } from "../../../db/schema"
 import { revalidatePath } from 'next/cache'
 import { User as BDUserTyper } from '@/utils/types/user'
+import { eq } from 'drizzle-orm'
 // @ts-ignore
 import { User as ClerkUser } from '@clerk/backend'
 import { v4 as uuidv4 } from 'uuid'
-import { BaseBusinessCard } from '@/utils/types/business-card'
+import { BaseBusinessCard, UpdateBusiness } from '@/utils/types/business-card'
 import { unstable_noStore as no_store } from 'next/cache'
 
 export const addDBUser = async (user: BDUserTyper) => {
@@ -21,12 +22,25 @@ export const addDBUser = async (user: BDUserTyper) => {
 
 export const addBusinessCard = async (businessCard: BaseBusinessCard) => {
     no_store()
+    const id = uuidv4()
+
     await db.insert(businessCards).values({
         ...businessCard,
-        id: uuidv4(),
+        id,
         createdAt: new Date()
     })
     revalidatePath("/")
+
+    return id
+}
+
+export const updateBusinessCard = async (businessCard: UpdateBusiness, id: string) => {
+    no_store()
+    const card = await db.update(businessCards).set({
+        ...businessCard
+    }).where(eq(businessCards.id, id))
+    revalidatePath("/")
+    return card
 }
 
 export const getDBUser = async (clerkUserId: string) => {

@@ -16,8 +16,8 @@ import FormInput from '@/components/form-input'
 import { Textarea } from '@/components/ui/textarea'
 import { getPokemon } from '@/utils/server/pokemon'
 import { capitalizeFirstLetter, getRandomPokemonId } from '@/utils/helpers'
-import { BaseBusinessCard, FullBusinessCard } from '@/utils/types/business-card'
-import { addBusinessCard } from '@/utils/server/db-actions'
+import { BaseBusinessCard, FullBusinessCard, UpdateBusiness } from '@/utils/types/business-card'
+import { addBusinessCard, updateBusinessCard } from '@/utils/server/db-actions'
 import { serverRequestHandler } from '@/utils/server/server-request-handler'
 import Image from 'next/image'
 
@@ -44,7 +44,7 @@ type Props = {
 }
 
 export default function EditCardForm({ businessCard, userId }: Props) {
-    const { name, company, title, notes, phone, mobile, email, createdAt, pokemonSpriteUrl, pokemonName, pokemonId } = businessCard
+    const { name, company, title, notes, phone, mobile, email, createdAt, pokemonSpriteUrl, pokemonName, pokemonId, id } = businessCard
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -61,30 +61,22 @@ export default function EditCardForm({ businessCard, userId }: Props) {
     const router = useRouter()
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { name, company, title, notes, phone, email } = data
+        const { name, company, title, notes, mobile, phone, email } = data
 
         await serverRequestHandler({
             serverFunction: async () => {
-                // const pokemonResponse = await getPokemon(getRandomPokemonId())
-                // console.log(pokemonResponse)
-                // if (!pokemonResponse) throw new Error('Failed to get pokemon api response!')
-                // const businessCard: BaseBusinessCard = {
-                //     name,
-                //     company,
-                //     title,
-                //     phone: phone ?? '',
-                //     email: email ?? '',
-                //     notes: notes ?? '',
-                //     userId,
-                //     pokemonId: pokemonResponse.id,
-                //     pokemonSpriteUrl: pokemonResponse.sprites.front_default,
-                //     pokemonName: pokemonResponse.name
-                // }
-                //
-                // await addBusinessCard(businessCard)
+                const businessCard: UpdateBusiness = {
+                    name,
+                    company,
+                    title,
+                    phone: phone ?? '',
+                    mobile: mobile ?? '',
+                    email: email ?? '',
+                    notes: notes ?? '',
+                }
+                return await updateBusinessCard(businessCard, id)
             },
-            successMessage: 'Success',
-            onSuccess: () => router.push('/')
+            successMessage: 'Success'
         })
     }
 

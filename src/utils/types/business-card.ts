@@ -13,6 +13,16 @@ export type BaseBusinessCard = {
     userId: string
 }
 
+export type UpdateBusiness = {
+    name: string
+    title: string
+    company: string
+    phone: string
+    mobile: string
+    email: string
+    notes: string
+}
+
 export type FullBusinessCard = {
     id: string
     email: string | null
