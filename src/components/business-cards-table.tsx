@@ -36,6 +36,7 @@ import {
 import { FullBusinessCard } from '@/utils/types/business-card'
 import Link from 'next/link'
 import Combobox from '@/components/combobox'
+import { DeleteDialog } from '@/components/delete-dialog'
 
 
 export const columns: ColumnDef<FullBusinessCard>[] = [
@@ -75,7 +76,9 @@ export const columns: ColumnDef<FullBusinessCard>[] = [
                     <Link href={`/cards/${row.original.id}`}>
                         <Button size="icon" variant="ghost"><Pencil size={16} /></Button>
                     </Link>
-                    <Button size="icon" className="text-red-400" variant="ghost"><Trash size={16} /></Button>
+                    <DeleteDialog id={row.original.id} name={row.original.name ?? 'unknown'}>
+                        <Button size="icon" className="text-red-400" variant="ghost"><Trash size={16} /></Button>
+                    </DeleteDialog>
                 </div>
             )
         },

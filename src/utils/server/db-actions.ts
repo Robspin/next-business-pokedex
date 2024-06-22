@@ -43,6 +43,12 @@ export const updateBusinessCard = async (businessCard: UpdateBusiness, id: strin
     return card
 }
 
+export const deleteBusinessCard = async (id: string) => {
+    no_store()
+    await db.delete(businessCards).where(eq(businessCards.id, id))
+    revalidatePath("/")
+}
+
 export const getDBUser = async (clerkUserId: string) => {
     no_store()
     return db.query.users.findFirst({
