@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table"
 import { FullBusinessCard } from '@/utils/types/business-card'
 import Link from 'next/link'
+import Combobox from '@/components/combobox'
 
 
 export const columns: ColumnDef<FullBusinessCard>[] = [
@@ -113,17 +114,24 @@ export default function BusinessCardsTable({ businessCards }: Props) {
         },
     })
 
+    const handleSelectCompany = (company: string) => {
+        table.getColumn("company")?.setFilterValue(company)
+    }
+
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter by name..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="w-[200px]"
-                />
+            <div className="flex items-center gap-2 py-4">
+                <div className="flex items-center gap-2">
+                    <Input
+                        placeholder="Filter by name..."
+                        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("name")?.setFilterValue(event.target.value)
+                        }
+                        className="w-[200px]"
+                    />
+                    <Combobox className="min-w-[200px]" name="company" dropdownData={Array.from(new Set(businessCards.map(c => c.company))).map(v => ({ name: v ?? '', id: v ?? '' }))} onSelectChange={(d) => handleSelectCompany(d.name)} />
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">

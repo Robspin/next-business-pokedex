@@ -58,7 +58,6 @@ export default function EditCardForm({ businessCard, userId }: Props) {
             createdAt: createdAt.toLocaleString() ?? ''
         }
     })
-    const router = useRouter()
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         const { name, company, title, notes, mobile, phone, email } = data
