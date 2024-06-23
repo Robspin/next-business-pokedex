@@ -37,11 +37,14 @@ export const FormSchema = z.object({
 })
 
 type Props = {
+    uploadedText?: string
     userId: string
 }
 
-export default function CreateCardForm({ userId }: Props) {
-    const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema) })
+export default function CreateCardForm({ userId, uploadedText }: Props) {
+    const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema), defaultValues: {
+        notes: uploadedText ?? ''
+        } })
     const router = useRouter()
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {

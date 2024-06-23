@@ -123,7 +123,7 @@ export default function BusinessCardsTable({ businessCards }: Props) {
 
     return (
         <div className="w-full">
-            <div className="flex items-center gap-2 py-4">
+            <div className="flex items-center gap-2 py-4 overflow-y-scroll">
                 <div className="flex items-center gap-2">
                     <Input
                         placeholder="Filter by name..."
