@@ -6,11 +6,13 @@ import { ocrApiParseFile } from '@/utils/server/ocr-api'
 import { useFormState } from 'react-dom'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 
 export default function UploadImageButton() {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [selectedLanguage, setSelectedLanguage] = useState<string>('eng')
+    const [loading, setLoading] = useState(false)
     const [state, formAction] = useFormState(ocrApiParseFile, null)
     const router = useRouter()
 
@@ -27,6 +29,7 @@ export default function UploadImageButton() {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0]
+        setLoading(true)
         if (selectedFile && selectedFile.type.startsWith('image/')) {
             const form = event.target.form
             if (form) {
@@ -56,11 +59,12 @@ export default function UploadImageButton() {
                 accept="image/*"
             />
             <div className="w-full flex gap-2">
-                <Button variant="outline" onClick={handleButtonClick}>
-                    <FileImage size={20} className="mr-2 -ml-1"/>
+                <Button variant="outline" onClick={handleButtonClick} disabled={loading}>
+                    {loading ? <Image src="/spinner.gif" alt="Loading spinner" height={12} width={12} className="mr-2"/> :
+                    <FileImage size={20} className="mr-2 -ml-1"/>}
                     Upload image
                 </Button>
-                <Select defaultValue={localStorage.getItem('businessPokedexLang') ?? 'eng'} onValueChange={(val) => onLanguageChangeHandler(val)}>
+                <Select disabled={loading} defaultValue={localStorage.getItem('businessPokedexLang') ?? 'eng'} onValueChange={(val) => onLanguageChangeHandler(val)}>
                     <SelectTrigger>
                         <SelectValue placeholder="Card language" />
                     </SelectTrigger>
