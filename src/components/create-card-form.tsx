@@ -71,7 +71,7 @@ export default function CreateCardForm({ userId, uploadedText }: Props) {
                 return await addBusinessCard(businessCard)
             },
             successMessage: 'Success',
-            onSuccess: (id) => router.push(`/cards/${id}`)
+            onSuccess: (id) => router.push(`/cards/${id}?fresh=true`)
         })
     }
 

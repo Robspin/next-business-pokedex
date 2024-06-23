@@ -14,6 +14,13 @@ export default function UploadImageButton() {
     const [state, formAction] = useFormState(ocrApiParseFile, null)
     const router = useRouter()
 
+    useEffect(() => {
+        if (state?.success) {
+            const uploadedText = state.data
+            router.push(`/cards/new?uploadedText=${uploadedText}`)
+        }
+    }, [state])
+
     const handleButtonClick = () => {
         if (fileInputRef?.current) fileInputRef?.current.click()
     }
@@ -33,12 +40,10 @@ export default function UploadImageButton() {
         }
     }
 
-    useEffect(() => {
-        if (state?.success) {
-            const uploadedText = state.data
-            router.push(`/cards/new?uploadedText=${uploadedText}`)
-        }
-    }, [state])
+    const onLanguageChangeHandler = (val: string) => {
+        localStorage.setItem('businessPokedexLang', val)
+        setSelectedLanguage(val)
+    }
 
     return (
         <form action={formAction} className="flex">
@@ -55,7 +60,7 @@ export default function UploadImageButton() {
                     <FileImage size={20} className="mr-2 -ml-1"/>
                     Upload image
                 </Button>
-                <Select defaultValue="eng" onValueChange={(val) => setSelectedLanguage(val)}>
+                <Select defaultValue={localStorage.getItem('businessPokedexLang') ?? 'eng'} onValueChange={(val) => onLanguageChangeHandler(val)}>
                     <SelectTrigger>
                         <SelectValue placeholder="Card language" />
                     </SelectTrigger>

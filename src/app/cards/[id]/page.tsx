@@ -5,14 +5,18 @@ import Link from 'next/link'
 import { MoveLeft, Plus } from 'lucide-react'
 import EditCardForm from '@/components/edit-card-form'
 import { Button } from '@/components/ui/button'
+import CreateNewButtons from '@/components/create-new-buttons'
 
 type Props = {
     params: {
         id: string
+    },
+    searchParams: {
+        fresh: string | undefined
     }
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params, searchParams }: Props) {
     const user = await currentUser()
     let DBUser = await getDBUser(user?.id ?? '')
     const businessCard = await getBusinessCard(params.id, DBUser?.id ?? null)
@@ -34,12 +38,10 @@ export default async function Page({ params }: Props) {
     return (
         <div>
             <SignedIn>
+                {searchParams.fresh === 'true' && <CreateNewButtons />}
                 <div className="flex justify-between items-end">
                     <Link href="/" className="flex items-center hover:underline gap-2 mb-4"><MoveLeft size={16}/>Back to
                         overview</Link>
-                    <Link href="/cards/new" className="mb-3">
-                        <Button><Plus size={20} className="mr-2 -ml-1" />Add new business card</Button>
-                    </Link>
                 </div>
                 <EditCardForm businessCard={businessCard} userId={DBUser.id} />
             </SignedIn>
