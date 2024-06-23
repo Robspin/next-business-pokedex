@@ -1,0 +1,6 @@
+
+
+Todo
+- Page-layout (footer position)
+- Filter phone number and email from import
+- Accept camera photo's

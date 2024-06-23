@@ -66,6 +66,10 @@ export const columns: ColumnDef<FullBusinessCard>[] = [
     {
         accessorKey: "notes",
         header: "Notes",
+        cell: ({ row }) => {
+            const notes = row.original.notes ? `${row.original.notes.slice(0, 8)}...` :  ''
+            return <div>{notes}</div>
+        }
     },
     {
         id: "actions",
