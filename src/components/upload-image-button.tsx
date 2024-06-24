@@ -17,6 +17,7 @@ export default function UploadImageButton() {
     const router = useRouter()
 
     useEffect(() => {
+        console.log('state: ', state)
         if (state?.success) {
             const uploadedText = state.data
             router.push(`/cards/new?uploadedText=${uploadedText}`)
@@ -30,6 +31,8 @@ export default function UploadImageButton() {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0]
         setLoading(true)
+
+        console.log('file: ', selectedFile)
         if (selectedFile && selectedFile.type.startsWith('image/')) {
             const form = event.target.form
             if (form) {
