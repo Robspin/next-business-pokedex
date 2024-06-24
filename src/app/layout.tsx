@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <ClerkProvider>
           <html lang="en" className="dark">
           <body
-              className={`${inter.className} w-full flex flex-col lg:items-center overflow-y-scroll dark:bg-neutral-900 dark:text-neutral-100`}>
+              className={`${inter.className} min-h-screen w-full flex flex-col lg:items-center overflow-y-scroll dark:bg-neutral-900 dark:text-neutral-100`}>
               <link rel="icon" href="/favicon-pikachu.ico" sizes="any"/>
               <div className="w-full border-b dark:border-neutral-800 flex justify-center">
                   <nav
@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   {children}
                   <Toaster/>
               </div>
-              <footer className="h-40 flex justify-center items-center w-full mt-40">
+              <footer className="py-12 mt-auto flex justify-center items-center w-full">
                   <p>Built by <a href="https://github.com/Robspin" target="_blank" className="underline">Robspin</a></p>
               </footer>
           </body>
