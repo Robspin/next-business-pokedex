@@ -13,6 +13,7 @@ export const ocrApiParseFile = async (prevState: any, formData: FormData): Promi
         formData.append('apikey', process.env.OCR_API_KEY ?? '')
 
         const res = await (await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData })).json() as OcrApiResponse
+        console.log(res.ParsedResults[0].ParsedText)
         return { message: 'Success!', data: res.ParsedResults[0].ParsedText, success: true }
     } catch (e) {
         console.log(e)

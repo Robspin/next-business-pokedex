@@ -64,7 +64,7 @@ export default function UploadImageButton() {
                     <FileImage size={20} className="mr-2 -ml-1"/>}
                     Upload image
                 </Button>
-                <Select disabled={loading} defaultValue={localStorage.getItem('businessPokedexLang') ?? 'eng'} onValueChange={(val) => onLanguageChangeHandler(val)}>
+                <Select disabled={loading} defaultValue={typeof window !== 'undefined' ? localStorage.getItem('businessPokedexLang') ?? 'eng' : 'eng'} onValueChange={(val) => onLanguageChangeHandler(val)}>
                     <SelectTrigger>
                         <SelectValue placeholder="Card language" />
                     </SelectTrigger>

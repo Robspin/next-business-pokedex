@@ -41,8 +41,23 @@ type Props = {
     userId: string
 }
 
+function extractPhoneNumbersAndEmails(text: string): { phones: string[], emails: string[] } {
+    const phoneRegex = /\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+
+    const phones = text.match(phoneRegex) || [];
+    const emails = text.match(emailRegex) || [];
+
+    return { phones, emails };
+}
+
 export default function CreateCardForm({ userId, uploadedText }: Props) {
+    const { phones, emails } = extractPhoneNumbersAndEmails(uploadedText ?? '')
+
     const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema), defaultValues: {
+        phone: phones[0] ?? '',
+        mobile: phones[1] ?? '',
+        email: emails[0] ?? '',
         notes: uploadedText ?? ''
         } })
     const router = useRouter()
