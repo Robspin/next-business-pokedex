@@ -13,7 +13,7 @@ export default function CreateNewButtons() {
                     <div className="dark:bg-neutral-900 px-2 absolute -top-3">or</div>
                 </div>
                 <Link href="/cards/new">
-                    <Button className="min-w-[280px]"><Plus size={20} className="mr-2 -ml-1"/>Add new business
+                    <Button className="min-w-[280px]" variant="outline"><Plus size={20} className="mr-2 -ml-1"/>Add new business
                         card</Button>
                 </Link>
             </div>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { FileImage } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import { anthropicParseImage } from '@/utils/server/anthropic-api'
 
 function imageToBase64(file: File): Promise<string> {
@@ -13,6 +13,41 @@ function imageToBase64(file: File): Promise<string> {
         reader.onload = () => resolve(reader.result as string);
         reader.onerror = error => reject(error);
     });
+}
+
+function resizeBase64Image(base64: string, maxWidth: number, maxHeight: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+        // @ts-ignore
+        const img = new Image()
+        img.src = base64
+        img.onload = () => {
+            let width = img.width
+            let height = img.height
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            const canvas = document.createElement('canvas')
+            canvas.width = width
+            canvas.height = height
+
+            const ctx = canvas.getContext('2d')
+            ctx?.drawImage(img, 0, 0, width, height)
+
+            const newBase64 = canvas.toDataURL('image/jpeg', 0.7)
+            resolve(newBase64)
+        }
+        img.onerror = reject
+    })
 }
 
 export default function UploadImageButton() {
@@ -30,6 +65,7 @@ export default function UploadImageButton() {
 
         if (selectedFile && selectedFile.type.startsWith('image/')) {
             const base64Image = await imageToBase64(selectedFile)
+            const resizedBase64Image = await resizeBase64Image(base64Image, 800, 600)
             const { data } = await anthropicParseImage(base64Image)
 
             if (data) {
@@ -55,8 +91,8 @@ export default function UploadImageButton() {
                 name="file"
                 accept="image/*"
             />
-            <Button variant="outline" className="w-full" onClick={handleButtonClick} disabled={loading}>
-                {loading ? <Image src="/spinner.gif" alt="Loading spinner" height={12} width={12} className="mr-2"/> :
+            <Button className="w-full" onClick={handleButtonClick} disabled={loading}>
+                {loading ? <NextImage src="/spinner.gif" alt="Loading spinner" height={12} width={12} className="mr-2"/> :
                 <FileImage size={20} className="mr-2 -ml-1"/>}
                 Upload image
             </Button>
