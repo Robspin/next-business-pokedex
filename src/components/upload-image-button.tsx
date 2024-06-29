@@ -1,58 +1,52 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { FileImage } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { ocrApiParseFile } from '@/utils/server/ocr-api'
-import { useFormState } from 'react-dom'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { anthropicParseImage } from '@/utils/server/anthropic-api'
 
+function imageToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+    });
+}
 
 export default function UploadImageButton() {
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('eng')
     const [loading, setLoading] = useState(false)
-    const [state, formAction] = useFormState(ocrApiParseFile, null)
     const router = useRouter()
-
-    useEffect(() => {
-        console.log('state: ', state)
-        if (state?.success) {
-            const uploadedText = state.data
-            router.push(`/cards/new?uploadedText=${uploadedText}`)
-        }
-    }, [state])
 
     const handleButtonClick = () => {
         if (fileInputRef?.current) fileInputRef?.current.click()
     }
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0]
         setLoading(true)
 
-        console.log('file: ', selectedFile)
         if (selectedFile && selectedFile.type.startsWith('image/')) {
-            const form = event.target.form
-            if (form) {
-                const formData = new FormData(form)
-                formData.append('language', selectedLanguage)
-                formAction(formData)
+            const base64Image = await imageToBase64(selectedFile)
+            const { data } = await anthropicParseImage(base64Image)
+
+            if (data) {
+                const searchParams = new URLSearchParams()
+                Object.entries(data).forEach(([key, value]) => {
+                    searchParams.append(key, value)
+                });
+
+                router.push(`/cards/new?${searchParams.toString()}`)
+            } else {
+                console.log('Something went wrong getting the data from server action')
             }
-        } else if (selectedFile) {
-            alert('Please select an image file')
-            event.target.value = ''
         }
     }
 
-    const onLanguageChangeHandler = (val: string) => {
-        localStorage.setItem('businessPokedexLang', val)
-        setSelectedLanguage(val)
-    }
-
     return (
-        <form action={formAction} className="flex">
+        <div className="flex">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -61,24 +55,11 @@ export default function UploadImageButton() {
                 name="file"
                 accept="image/*"
             />
-            <div className="w-full flex gap-2">
-                <Button variant="outline" onClick={handleButtonClick} disabled={loading}>
-                    {loading ? <Image src="/spinner.gif" alt="Loading spinner" height={12} width={12} className="mr-2"/> :
-                    <FileImage size={20} className="mr-2 -ml-1"/>}
-                    Upload image
-                </Button>
-                <Select disabled={loading} defaultValue={typeof window !== 'undefined' ? localStorage.getItem('businessPokedexLang') ?? 'eng' : 'eng'} onValueChange={(val) => onLanguageChangeHandler(val)}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Card language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectItem value="eng">ENG</SelectItem>
-                            <SelectItem value="jpn">JPN</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-        </form>
+            <Button variant="outline" className="w-full" onClick={handleButtonClick} disabled={loading}>
+                {loading ? <Image src="/spinner.gif" alt="Loading spinner" height={12} width={12} className="mr-2"/> :
+                <FileImage size={20} className="mr-2 -ml-1"/>}
+                Upload image
+            </Button>
+        </div>
     )
 }

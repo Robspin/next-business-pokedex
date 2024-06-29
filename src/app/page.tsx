@@ -2,11 +2,8 @@
 import BusinessCardsTable from '@/components/business-cards-table'
 import { SignedIn, SignedOut, SignInButton, useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { getBusinessCards, getDBUser } from '@/utils/server/db-actions'
 import { currentUser } from '@clerk/nextjs/server'
-import { Plus } from 'lucide-react'
-import UploadImageButton from '@/components/upload-image-button'
 import CreateNewButtons from '@/components/create-new-buttons'
 
 

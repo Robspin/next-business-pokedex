@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import FormInput from '@/components/form-input'
 import { Textarea } from '@/components/ui/textarea'
 import { getPokemon } from '@/utils/server/pokemon'
@@ -41,25 +41,18 @@ type Props = {
     userId: string
 }
 
-function extractPhoneNumbersAndEmails(text: string): { phones: string[], emails: string[] } {
-    const phoneRegex = /\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
-    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
-
-    const phones = text.match(phoneRegex) || [];
-    const emails = text.match(emailRegex) || [];
-
-    return { phones, emails };
-}
-
 export default function CreateCardForm({ userId, uploadedText }: Props) {
-    const { phones, emails } = extractPhoneNumbersAndEmails(uploadedText ?? '')
+    const searchParams = useSearchParams()
 
     const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema), defaultValues: {
-        phone: phones[0] ?? '',
-        mobile: phones[1] ?? '',
-        email: emails[0] ?? '',
-        notes: uploadedText ?? ''
-        } })
+            name: searchParams.get('name') ?? '',
+            title: searchParams.get('title') ?? '',
+            company: searchParams.get('company') ?? '',
+            phone: searchParams.get('phone') ?? '',
+            mobile: searchParams.get('mobile') ?? '',
+            email: searchParams.get('email') ?? '',
+        }
+    })
     const router = useRouter()
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
