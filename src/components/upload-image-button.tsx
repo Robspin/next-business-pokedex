@@ -17,7 +17,6 @@ function imageToBase64(file: File): Promise<string> {
 
 function resizeBase64Image(base64: string, maxWidth: number, maxHeight: number): Promise<string> {
     return new Promise((resolve, reject) => {
-        // @ts-ignore
         const img = new Image()
         img.src = base64
         img.onload = () => {

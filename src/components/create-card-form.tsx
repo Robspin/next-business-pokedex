@@ -37,11 +37,10 @@ export const FormSchema = z.object({
 })
 
 type Props = {
-    uploadedText?: string
     userId: string
 }
 
-export default function CreateCardForm({ userId, uploadedText }: Props) {
+export default function CreateCardForm({ userId }: Props) {
     const searchParams = useSearchParams()
 
     const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema), defaultValues: {
