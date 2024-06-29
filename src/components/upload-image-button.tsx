@@ -49,54 +49,6 @@ function resizeBase64Image(base64: string, maxWidth: number, maxHeight: number):
         img.onerror = reject
     })
 }
-//
-// function resizeBase64Image(base64: string, maxWidth: number, maxHeight: number, maxSizeInBytes: number): Promise<string> {
-//     return new Promise((resolve, reject) => {
-//         const img = document.createElement('img');
-//         img.src = base64;
-//         img.onload = () => {
-//             let { width, height } = calculateAspectRatioFit(img.width, img.height, maxWidth, maxHeight);
-//
-//             const canvas = document.createElement('canvas');
-//             canvas.width = width;
-//             canvas.height = height;
-//
-//             const ctx = canvas.getContext('2d');
-//             ctx?.drawImage(img, 0, 0, width, height);
-//
-//             // Try WebP first
-//             if (canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0) {
-//                 const webpBase64 = progressivelyReduceQuality(canvas, maxSizeInBytes);
-//                 if (webpBase64.length * 0.75 <= maxSizeInBytes) {
-//                     resolve(webpBase64);
-//                     return;
-//                 }
-//             }
-//
-//             // Fallback to JPEG with progressive reduction
-//             const jpegBase64 = progressivelyReduceQuality(canvas, maxSizeInBytes);
-//             resolve(jpegBase64);
-//         };
-//         img.onerror = reject;
-//     });
-// }
-//
-// function progressivelyReduceQuality(canvas: HTMLCanvasElement, maxSizeInBytes: number): string {
-//     let quality = 0.7;
-//     let base64 = canvas.toDataURL('image/jpeg', quality);
-//
-//     while (base64.length * 0.75 > maxSizeInBytes && quality > 0.1) {
-//         quality -= 0.1;
-//         base64 = canvas.toDataURL('image/jpeg', quality);
-//     }
-//
-//     return base64;
-// }
-
-// function calculateAspectRatioFit(srcWidth: number, srcHeight: number, maxWidth: number, maxHeight: number) {
-//     const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-//     return { width: srcWidth * ratio, height: srcHeight * ratio };
-// }
 
 export default function UploadImageButton() {
     const fileInputRef = useRef<HTMLInputElement>(null)
