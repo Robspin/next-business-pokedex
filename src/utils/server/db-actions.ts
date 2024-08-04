@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 // @ts-ignore
 import { User as ClerkUser } from '@clerk/backend'
 import { v4 as uuidv4 } from 'uuid'
-import { BaseBusinessCard, UpdateBusiness } from '@/utils/types/business-card'
+import { BaseBusinessCard, FullBusinessCard, UpdateBusiness } from '@/utils/types/business-card'
 import { unstable_noStore as no_store } from 'next/cache'
 
 export const addDBUser = async (user: BDUserTyper) => {
@@ -56,13 +56,13 @@ export const getDBUser = async (clerkUserId: string) => {
     })
 }
 
-export const getBusinessCard = async (id: string, userId: string | null) => {
+export const getBusinessCard = async (id: string, userId: string | null): Promise<FullBusinessCard | undefined> => {
     if (!userId) return undefined
 
     no_store()
     const card = await db.query.businessCards.findFirst({
         where: ((strat, { eq }) => eq(strat.id, id)),
-    })
+    }) as FullBusinessCard | undefined
 
     if (card && card.userId === userId) return card
     return undefined
