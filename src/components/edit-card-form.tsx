@@ -44,7 +44,7 @@ type Props = {
 }
 
 export default function EditCardForm({ businessCard, userId }: Props) {
-    const { name, company, title, notes, phone, mobile, email, createdAt, pokemonSpriteUrl, pokemonName, pokemonId, id } = businessCard
+    const { name, company, title, notes, phone, mobile, email, createdAt, imageUrl, pokemonSpriteUrl, pokemonName, pokemonId, id } = businessCard
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -99,8 +99,7 @@ export default function EditCardForm({ businessCard, userId }: Props) {
                         <FormInput formControl={form.control} name="phone" />
                         <FormInput formControl={form.control} name="mobile" />
                         <FormInput formControl={form.control} name="email" />
-                        <FormInput formControl={form.control} disableInput name="createdAt" />
-                        <div className="lg:col-span-2">
+                        <div>
                             <FormField
                                 control={form.control}
                                 name="notes"
@@ -110,7 +109,7 @@ export default function EditCardForm({ businessCard, userId }: Props) {
                                         <FormControl>
                                             <Textarea
                                                 placeholder="Enter notes..."
-                                                // className="resize-none"
+                                                className="min-h-40"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -119,6 +118,17 @@ export default function EditCardForm({ businessCard, userId }: Props) {
                                 )}
                             />
                         </div>
+                        {imageUrl &&
+                            <div className="w-full">
+                                <FormLabel>Selected image</FormLabel>
+                                <Card className="overflow-hidden h-40 w-full mt-2 p-2">
+                                    <div className="h-full w-full relative">
+                                        <Image src={imageUrl} alt="Uploaded business card" className="w-full" objectFit="contain" fill />
+                                    </div>
+                                </Card>
+                            </div>
+                        }
+                        <FormInput formControl={form.control} disableInput name="createdAt" />
                     </CardContent>
                     <CardFooter className="border-t border-t-stone-800 px-6 py-4 flex justify-end">
                         <Button type="submit">Save</Button>

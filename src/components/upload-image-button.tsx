@@ -5,6 +5,8 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import NextImage from 'next/image'
 import { anthropicParseImage } from '@/utils/server/anthropic-api'
+import { useAtom } from 'jotai'
+import { imageFileAtom } from '@/utils/jotai'
 
 function imageToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -52,6 +54,7 @@ function resizeBase64Image(base64: string, maxWidth: number, maxHeight: number):
 export default function UploadImageButton() {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [loading, setLoading] = useState(false)
+    const [, setImageFileAtom] = useAtom(imageFileAtom)
     const router = useRouter()
 
     const handleButtonClick = () => {
@@ -63,6 +66,7 @@ export default function UploadImageButton() {
         setLoading(true)
 
         if (selectedFile && selectedFile.type.startsWith('image/')) {
+            setImageFileAtom(selectedFile)
             const base64Image = await imageToBase64(selectedFile)
             const resizedBase64Image = await resizeBase64Image(base64Image, 800, 600)
             const { data } = await anthropicParseImage(resizedBase64Image)

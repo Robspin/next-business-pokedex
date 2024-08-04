@@ -11,6 +11,7 @@ export type BaseBusinessCard = {
     pokemonName: string
     pokemonSpriteUrl: string
     userId: string
+    imageUrl: string | undefined
 }
 
 export type UpdateBusiness = {
@@ -36,5 +37,6 @@ export type FullBusinessCard = {
     pokemonId: number | null
     pokemonName: string | null
     pokemonSpriteUrl: string | null
+    imageUrl: string | undefined
     notes: string | null
 }
