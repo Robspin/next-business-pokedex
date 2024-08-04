@@ -68,10 +68,10 @@ export const getBusinessCard = async (id: string, userId: string | null): Promis
     return undefined
 }
 
-export const getBusinessCards = async (userId: string | null) => {
+export const getBusinessCards = async (userId: string | null): Promise<FullBusinessCard[]> => {
     if (!userId) return []
     no_store()
-    return db.query.businessCards.findMany({ where: ((strat, { eq }) => eq(strat.userId, userId)) })
+    return db.query.businessCards.findMany({ where: ((strat, { eq }) => eq(strat.userId, userId)) }) as Promise<FullBusinessCard[]>
 }
 
 export const createDBUser = async (user: ClerkUser) => {
